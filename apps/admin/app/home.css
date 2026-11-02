@@ -64,7 +64,15 @@
 .storefront .banner-perks article:nth-child(2) i { background: #e5f5f3; }
 .storefront .banner-perks article:nth-child(4) i { background: #fdeceb; }
 .storefront .banner-photo { grid-area: photo; position: relative; z-index: 0; min-height: 100%; overflow: hidden; }
-.storefront .banner-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 55% center; }
+.storefront .banner-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .7s ease; }
+.storefront .banner-slide.is-on { opacity: 1; }
+.storefront .banner-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.storefront .banner-nav { position: absolute; z-index: 3; right: 14px; bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.storefront .banner-nav > button, .storefront .banner-dots button { border: 0; padding: 0; cursor: pointer; }
+.storefront .banner-nav > button { width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 253, 249, .92); color: #4e2348; font-size: 22px; line-height: 1; }
+.storefront .banner-dots { display: flex; gap: 6px; }
+.storefront .banner-dots button { width: 8px; height: 8px; border-radius: 99px; background: rgba(255, 253, 249, .72); }
+.storefront .banner-dots button[aria-current="true"] { width: 22px; background: #e0b15a; }
 .storefront .banner-photo:before { content: ""; position: absolute; inset: 0 auto 0 0; width: 48px; z-index: 1; pointer-events: none; background: linear-gradient(90deg, #fff8f2, rgba(255,248,242,0)); }
 .storefront .section-head { width: 100%; display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 34px 0 14px; }
 .storefront .section-head h2 { display: flex; align-items: center; gap: 10px; color: #6b2158; font-size: 34px; margin: 0; }

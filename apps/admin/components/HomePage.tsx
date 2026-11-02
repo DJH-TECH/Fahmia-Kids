@@ -40,6 +40,11 @@ const aboutPoints = [
   ["why", "Pourquoi nous choisir ?", "Des livres sélectionnés avec soin, une livraison fiable et un service à l’écoute."],
 ] as const;
 
+const bannerSlides = [
+  { src: "/banner-enfants.png", alt: "Deux enfants lisent Les Histoires des Prophètes" },
+  { src: "/banner-lecture.jpg", alt: "Une mère et son fils lisent Les Histoires des Prophètes" },
+] as const;
+
 const quotes = [
   { name: "Aïssatou D.", text: "Les livres de Fahmia Kids sont vraiment exceptionnels. Ma fille adore ses histoires et apprend beaucoup à chaque lecture. Merci pour cette belle initiative !" },
   { name: "Mamadou S.", text: "Le coffret est clair, l’âge est indiqué, et nous reprenons l’histoire chaque soir. Une belle sélection pour les enfants." },
@@ -53,7 +58,15 @@ export function HomePage() {
   const hover = reduce ? undefined : { y: -5 };
   const [products, setProducts] = useState<CatalogProduct[]>([]);
   const [quote, setQuote] = useState(0);
+  const [slide, setSlide] = useState(0);
+  const [slidePaused, setSlidePaused] = useState(false);
   const [note, setNote] = useState("Cet envoi de maquette ne part pas.");
+
+  useEffect(() => {
+    if (reduce || slidePaused) return;
+    const timer = window.setInterval(() => setSlide((index) => (index + 1) % bannerSlides.length), 5500);
+    return () => window.clearInterval(timer);
+  }, [reduce, slidePaused]);
 
   useEffect(() => {
     api<CatalogProduct[]>("/api/catalog").then(setProducts).catch(() => setProducts([]));
@@ -79,9 +92,22 @@ export function HomePage() {
               <MotionLink className="btn-line" href="/nouveautes" whileHover={reduce ? undefined : { y: -3 }} whileTap={reduce ? undefined : { scale: 0.98 }}>Voir les nouveautés</MotionLink>
             </div>
           </div>
-          <div className="banner-photo">
-            <img src="/hero.jpg" alt="Deux enfants lisent ensemble" />
+          <div className="banner-photo" onMouseEnter={() => setSlidePaused(true)} onMouseLeave={() => setSlidePaused(false)}>
+            {bannerSlides.map((item, index) => (
+              <div className={index === slide ? "banner-slide is-on" : "banner-slide"} key={item.src} aria-hidden={index !== slide}>
+                <img src={item.src} alt={index === slide ? item.alt : ""} />
+              </div>
+            ))}
             <span className="banner-shine" aria-hidden="true" />
+            <div className="banner-nav">
+              <button type="button" aria-label="Photo précédente" onClick={() => setSlide((index) => (index + bannerSlides.length - 1) % bannerSlides.length)}>‹</button>
+              <div className="banner-dots">
+                {bannerSlides.map((item, index) => (
+                  <button key={item.src} type="button" aria-label={`Photo ${index + 1}`} aria-current={index === slide ? "true" : undefined} onClick={() => setSlide(index)} />
+                ))}
+              </div>
+              <button type="button" aria-label="Photo suivante" onClick={() => setSlide((index) => (index + 1) % bannerSlides.length)}>›</button>
+            </div>
           </div>
           <div className="banner-perks">
             <motion.article whileHover={hover} transition={ease}><motion.i aria-hidden="true" animate={reduce ? undefined : { y: [0, -4, 0] }} transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a07d3a" strokeWidth="1.8"><path d="M5 4.5h8.5A2.5 2.5 0 0 1 16 7v12.5H8A3 3 0 0 0 5 16.5z" /><path d="M5 4.5A2.5 2.5 0 0 0 2.5 7v9.5" /><path d="M8.5 8.5h4.5M8.5 12h4.5" strokeLinecap="round" /></svg></motion.i><span><strong>Livres</strong>adaptés à chaque âge</span></motion.article>
