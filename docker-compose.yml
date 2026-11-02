@@ -1,0 +1,16 @@
+# PostgreSQL pour le jour où Docker est installé.
+# Aujourd'hui l'API utilise SQLite (voir apps/api/.env) pour pouvoir tourner sans Docker.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: fahmia
+      POSTGRES_PASSWORD: fahmia
+      POSTGRES_DB: fahmia
+    ports:
+      - "5432:5432"
+    volumes:
+      - fahmia-pg:/var/lib/postgresql/data
+
+volumes:
+  fahmia-pg:
