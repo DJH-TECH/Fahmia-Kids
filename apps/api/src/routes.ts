@@ -1078,7 +1078,7 @@ export async function publicProduct(req: Request, res: Response) {
   const related = [
     ...visible.filter((item) => item.categoryId && item.categoryId === row.categoryId),
     ...visible.filter((item) => item.categoryId !== row.categoryId),
-  ].slice(0, 4);
+  ].slice(0, 5);
   res.json({
     ...catalogItem(row, promos, games),
     reviews: row.reviews.map((review) => ({
